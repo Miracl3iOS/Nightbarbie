@@ -1,424 +1,795 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Night Route</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Night Tools — аренда инструмента</title>
 
-  <!-- Красивые шрифты -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-main: #050712;
+  --bg-card: #0d111f;
+  --bg-elevated: #13192a;
 
-  <style>
-    :root {
-      --bg-main: #141822;
-      --bg-card: #1b2130;
-      --accent-blue: #42d3ff;
-      --accent-pink: #ff4bd1;
-      --text-muted: #7f8ba8;
+  --accent-blue: #4dd7ff;
+  --accent-blue-soft: rgba(77,215,255,0.25);
+  --accent-pink: #ff57e0;
+  --accent-gold: #ffc857;
+  --accent-white: #f7f7ff;
 
-      --radius-xl: 32px;
-      --shadow-neo-out: 24px 24px 40px rgba(0, 0, 0, 0.65),
-                        -20px -20px 35px rgba(70, 90, 130, 0.35);
-      --shadow-neo-in: inset 18px 18px 32px rgba(0, 0, 0, 0.8),
-                       inset -10px -10px 26px rgba(80, 100, 150, 0.5);
-      --transition-fast: 0.18s ease-out;
-    }
+  --text-muted: #9aa3c2;
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  --radius-xl: 28px;
+  --shadow-neo-out: 18px 18px 36px rgba(0,0,0,0.9),
+                    -14px -14px 30px rgba(60,80,130,0.35);
+  --shadow-neo-in: inset 16px 16px 30px rgba(0,0,0,0.9),
+                   inset -10px -10px 26px rgba(80,100,160,0.7);
 
-    body {
-      min-height: 100vh;
-      font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at top, #1c2333 0, #090b11 55%, #050509 100%);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
+  --transition-fast: 0.18s ease-out;
+}
 
-    .page {
-      width: 100%;
-      max-width: 430px;
-    }
+/* RESET */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+               system-ui, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #11172a 0, #050712 55%, #020309 100%);
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
 
-    .card {
-      background: var(--bg-card);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-neo-out);
-      padding: 24px 22px 28px;
-      position: relative;
-      overflow: hidden;
-    }
+/* Основной контейнер */
+.app{
+  position:relative;
+  width:100%;
+  max-width:420px;           /* как айфон */
+  height:100%;
+  max-height:840px;
+  border-radius:32px;
+  background: radial-gradient(circle at top, #151c33 0, #050712 52%, #020308 100%);
+  box-shadow:
+    0 32px 80px rgba(0,0,0,0.9),
+    0 0 0 1px rgba(120,140,200,0.12);
+  overflow:hidden;
+}
 
-    /* Мягкое свечение по краям */
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -60%;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(89, 195, 255, 0.05), transparent 60%),
-        radial-gradient(circle at 100% 0%, rgba(255, 75, 210, 0.06), transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
+/* Внутренняя карточка */
+.app-inner{
+  position:relative;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  padding:16px 18px 18px;
+}
 
-    .card-inner {
-      position: relative;
-      z-index: 1;
-    }
+/* TOP BAR */
+.top-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
 
-    /* Кнопка-бургер */
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
+/* Бургер */
+.burger{
+  width:40px;
+  height:40px;
+  border-radius:16px;
+  border:none;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-neo-out);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.burger-lines{
+  width:17px;
+  height:13px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.burger-lines span{
+  display:block;
+  height:2px;
+  border-radius:999px;
+  background: var(--accent-blue);
+  box-shadow:0 0 6px var(--accent-blue),0 0 14px var(--accent-blue);
+}
+.burger:hover{
+  transform:translateY(-1px);
+  box-shadow: 14px 14px 26px rgba(0,0,0,0.9),
+              -12px -12px 24px rgba(60,80,130,0.5);
+}
 
-    .burger {
-      width: 42px;
-      height: 42px;
-      border-radius: 18px;
-      background: var(--bg-card);
-      box-shadow: var(--shadow-neo-out);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-    }
+/* Заголовок-неон */
+.title-wrap{
+  flex:1;
+  text-align:center;
+}
+.title-main{
+  font-size:28px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color: var(--accent-blue);
+  text-shadow:
+    0 0 10px var(--accent-blue),
+    0 0 24px var(--accent-blue),
+    0 0 40px rgba(77,215,255,0.9);
+}
+.title-sub{
+  margin-top:2px;
+  font-size:11px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color: var(--accent-pink);
+  text-shadow:
+    0 0 10px var(--accent-pink),
+    0 0 26px var(--accent-pink);
+}
 
-    .burger-lines {
-      width: 18px;
-      height: 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+/* Затычка справа для выравнивания */
+.top-placeholder{
+  width:40px;
+}
 
-    .burger-lines span {
-      display: block;
-      height: 2px;
-      border-radius: 999px;
-      background: var(--accent-blue);
-      box-shadow: 0 0 6px var(--accent-blue), 0 0 14px var(--accent-blue);
-    }
+/* Основной скролл-контент */
+.scroll-area{
+  margin-top:8px;
+  flex:1;
+  overflow-y:auto;
+  padding:4px 2px 6px;
+}
 
-    .burger:hover {
-      transform: translateY(-1px);
-      box-shadow: 18px 18px 30px rgba(0, 0, 0, 0.7),
-                  -18px -18px 28px rgba(80, 100, 150, 0.5);
-    }
+/* Блок логотипа на 1/4 высоты */
+.logo-card{
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-neo-out);
+  padding:18px 16px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:16px;
+}
+.logo-placeholder{
+  width:72px;
+  height:72px;
+  border-radius:24px;
+  background: radial-gradient(circle at 30% 20%, rgba(77,215,255,0.85), transparent 55%),
+              radial-gradient(circle at 80% 80%, rgba(255,87,224,0.8), transparent 60%);
+  box-shadow:
+    0 0 18px rgba(77,215,255,0.9),
+    0 0 34px rgba(255,87,224,0.85);
+}
+.logo-texts{
+  flex:1;
+}
+.logo-name{
+  font-size:17px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--accent-blue);
+  text-shadow: 0 0 8px var(--accent-blue);
+}
+.logo-tagline{
+  margin-top:6px;
+  font-size:13px;
+  color:var(--text-muted);
+  line-height:1.4;
+}
 
-    /* Логотип */
-    .logo {
-      text-align: center;
-      flex: 1;
-    }
+/* Описание под логотипом */
+.about{
+  margin-bottom:16px;
+  font-size:13px;
+  color:var(--text-muted);
+  line-height:1.5;
+}
 
-    .logo-script {
-      font-family: "Pacifico", cursive;
-      font-size: 32px;
-      letter-spacing: 0.08em;
-      color: var(--accent-blue);
-      text-shadow:
-        0 0 10px var(--accent-blue),
-        0 0 24px var(--accent-blue),
-        0 0 40px rgba(66, 211, 255, 0.9);
-      white-space: nowrap;
-    }
+/* НЕОН-ТЕКСТ ОБЩИЙ */
+.neon-blue{
+  color:var(--accent-blue);
+  text-shadow:
+    0 0 8px var(--accent-blue),
+    0 0 22px var(--accent-blue);
+}
 
-    .logo-script span {
-      color: var(--accent-pink);
-      text-shadow:
-        0 0 10px var(--accent-pink),
-        0 0 26px var(--accent-pink);
-    }
+/* Кнопка "Выбрать город" */
+.btn-primary{
+  width:100%;
+  border-radius:999px;
+  border:none;
+  padding:12px 16px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-neo-out);
+  color:var(--accent-blue);
+  text-shadow:0 0 10px var(--accent-blue);
+  font-weight:600;
+  font-size:14px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  cursor:pointer;
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+.btn-primary:hover{
+  transform:translateY(-1px);
+  box-shadow: 18px 18px 34px rgba(0,0,0,0.9),
+              -14px -14px 30px rgba(60,80,130,0.6);
+}
+.btn-primary span.dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--accent-pink);
+  box-shadow:0 0 8px var(--accent-pink);
+}
 
-    .logo-sub {
-      margin-top: 4px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--accent-blue);
-      text-shadow: 0 0 8px var(--accent-blue), 0 0 16px var(--accent-blue);
-    }
+/* Выбранный город */
+.selected-city{
+  font-size:12px;
+  color:var(--text-muted);
+  margin-bottom:12px;
+}
+.selected-city strong{
+  color:var(--accent-blue);
+}
 
-    /* Неоновая стрелка */
-    .arrow-wrap {
-      margin: 22px 0 8px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+/* КЛАССЫ */
+.class-chooser{
+  margin-bottom:16px;
+}
+.class-label{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.18em;
+  margin-bottom:8px;
+  color:var(--text-muted);
+}
+.class-buttons{
+  display:flex;
+  gap:8px;
+}
+.class-btn{
+  flex:1;
+  border-radius:16px;
+  border:none;
+  padding:9px 6px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-neo-out);
+  cursor:pointer;
+  font-size:11px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), color var(--transition-fast), text-shadow var(--transition-fast);
+}
+.class-btn:hover{
+  transform:translateY(-1px);
+}
+.class-btn.active-standard{
+  color:var(--accent-white);
+  text-shadow:0 0 8px var(--accent-white);
+  box-shadow: var(--shadow-neo-in);
+}
+.class-btn.active-vip{
+  color:#ff6060;
+  text-shadow:0 0 10px #ff6060,0 0 22px #ff6060;
+  box-shadow: var(--shadow-neo-in);
+}
+.class-btn.active-elite{
+  color:var(--accent-gold);
+  text-shadow:0 0 10px var(--accent-gold),0 0 22px var(--accent-gold);
+  box-shadow: var(--shadow-neo-in);
+}
 
-    .arrow {
-      width: 42px;
-      height: 80px;
-      border-left: 2px solid var(--accent-blue);
-      border-bottom: 2px solid var(--accent-blue);
-      border-bottom-left-radius: 28px;
-      transform: translateX(4px) rotate(-15deg);
-      filter: drop-shadow(0 0 8px var(--accent-blue))
-              drop-shadow(0 0 16px var(--accent-blue));
-    }
+/* КАРТОЧКИ ИНСТРУМЕНТОВ */
+.tools-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:18px;
+}
+.tool-card{
+  background: var(--bg-card);
+  border-radius:20px;
+  box-shadow: var(--shadow-neo-out);
+  padding:10px 10px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  font-size:11px;
+}
+.tool-photo{
+  width:100%;
+  aspect-ratio:3/4;
+  border-radius:16px;
+  background: radial-gradient(circle at 20% 10%, rgba(77,215,255,0.7), transparent 60%),
+              radial-gradient(circle at 80% 90%, rgba(255,87,224,0.7), transparent 60%);
+  box-shadow:0 0 18px rgba(77,215,255,0.8);
+}
+.tool-name{
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--accent-blue);
+  text-shadow:0 0 8px var(--accent-blue);
+}
+.tool-body{
+  color:var(--text-muted);
+  line-height:1.35;
+}
+.tool-body strong{
+  color:var(--accent-blue);
+}
 
-    .arrow-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--text-muted);
-    }
+/* Большой блок описания под гридом (пример из текста) */
+.tool-details{
+  background: var(--bg-elevated);
+  border-radius:22px;
+  box-shadow: var(--shadow-neo-out);
+  padding:14px 14px 16px;
+  font-size:12px;
+  color:var(--text-muted);
+  line-height:1.5;
+  margin-bottom:18px;
+}
+.tool-details-title{
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:0.18em;
+  margin-bottom:10px;
+  color:var(--accent-blue);
+  text-shadow:0 0 8px var(--accent-blue);
+}
 
-    /* Общий стиль неон-текста */
-    .neon-text {
-      color: var(--accent-blue);
-      text-shadow:
-        0 0 10px var(--accent-blue),
-        0 0 22px var(--accent-blue),
-        0 0 40px rgba(66, 211, 255, 0.9);
-    }
+/* Кнопка ЗАКАЗАТЬ */
+.btn-order{
+  width:100%;
+  border-radius:20px;
+  border:none;
+  padding:14px 16px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-neo-out);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-size:13px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--accent-blue);
+  text-shadow:0 0 10px var(--accent-blue);
+  position:relative;
+  overflow:hidden;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+.btn-order::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(90deg,
+    rgba(77,215,255,0.15),
+    rgba(255,87,224,0.25),
+    rgba(77,215,255,0.15));
+  opacity:0;
+  transition:opacity var(--transition-fast);
+}
+.btn-order span{
+  position:relative;
+  z-index:1;
+}
+.btn-order:hover{
+  transform:translateY(-2px);
+  box-shadow: 22px 22px 40px rgba(0,0,0,0.95),
+              -16px -16px 32px rgba(60,80,130,0.7);
+}
+.btn-order:hover::before{
+  opacity:1;
+}
 
-    /* Неоморфные элементы */
-    .neo-pill,
-    .neo-block,
-    .neo-input {
-      background: var(--bg-card);
-      border-radius: 22px;
-      box-shadow: var(--shadow-neo-out);
-      padding: 14px 20px;
-      border: none;
-      outline: none;
-      color: inherit;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition:
-        box-shadow var(--transition-fast),
-        transform var(--transition-fast),
-        background var(--transition-fast);
-      font-family: inherit;
-    }
+/* TG icon */
+.tg-icon{
+  width:20px;
+  height:20px;
+  border-radius:999px;
+  background:#0088cc;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 8px rgba(0,136,204,0.9);
+}
+.tg-icon svg{
+  width:13px;
+  height:13px;
+  fill:#fff;
+}
 
-    .neo-pill {
-      border-radius: 999px;
-      padding-inline: 28px;
-    }
+/* SIDE MENU */
+.side-menu-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(1,2,5,0.65);
+  backdrop-filter: blur(6px);
+  opacity:0;
+  visibility:hidden;
+  transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+  display:flex;
+  justify-content:flex-start;
+}
+.side-menu-overlay.open{
+  opacity:1;
+  visibility:visible;
+}
+.side-menu{
+  width:60%;
+  max-width:260px;
+  background:var(--bg-card);
+  box-shadow: var(--shadow-neo-out);
+  height:100%;
+  padding:18px 16px;
+  border-radius:0 26px 26px 0;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.side-menu-title{
+  font-size:14px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--accent-blue);
+  text-shadow:0 0 8px var(--accent-blue);
+}
+.side-menu p{
+  font-size:12px;
+  color:var(--text-muted);
+  line-height:1.4;
+}
+.side-menu-btn{
+  margin-top:auto;
+  border-radius:16px;
+  border:none;
+  padding:10px 14px;
+  background:var(--bg-elevated);
+  color:var(--accent-blue);
+  text-shadow:0 0 8px var(--accent-blue);
+  font-size:12px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  cursor:pointer;
+  box-shadow: var(--shadow-neo-out);
+}
 
-    .neo-block {
-      width: 100%;
-      justify-content: flex-start;
-    }
+/* Модальное окно выбора города */
+.city-modal{
+  position:absolute;
+  inset:0;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(3,5,10,0.8);
+  backdrop-filter: blur(8px);
+  opacity:0;
+  visibility:hidden;
+  transition: opacity 0.18s ease-out, visibility 0.18s ease-out;
+}
+.city-modal.open{
+  opacity:1;
+  visibility:visible;
+}
+.city-panel{
+  width:100%;
+  max-width:320px;
+  background:var(--bg-card);
+  border-radius:26px;
+  box-shadow: var(--shadow-neo-out);
+  padding:16px 16px 14px;
+}
+.city-panel-title{
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:0.18em;
+  margin-bottom:12px;
+  color:var(--accent-blue);
+  text-shadow:0 0 8px var(--accent-blue);
+  text-align:center;
+}
+.city-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:10px;
+}
+.city-btn{
+  border-radius:16px;
+  border:none;
+  padding:10px 12px;
+  background:var(--bg-elevated);
+  color:var(--accent-blue);
+  text-shadow:0 0 8px var(--accent-blue);
+  font-size:13px;
+  cursor:pointer;
+  box-shadow: var(--shadow-neo-out);
+  text-align:center;
+}
+.city-close{
+  border:none;
+  background:transparent;
+  font-size:11px;
+  color:var(--text-muted);
+  text-align:center;
+  width:100%;
+  margin-top:2px;
+}
 
-    .neo-input {
-      width: 100%;
-      justify-content: flex-start;
-      box-shadow: var(--shadow-neo-in);
-      border-radius: 20px;
-    }
+/* SCROLLBAR (мягкий) */
+.scroll-area::-webkit-scrollbar{width:4px}
+.scroll-area::-webkit-scrollbar-track{background:transparent}
+.scroll-area::-webkit-scrollbar-thumb{
+  background:rgba(100,120,170,0.7);
+  border-radius:999px;
+}
 
-    .neo-pill:hover,
-    .neo-block:hover {
-      transform: translateY(-1px);
-      box-shadow: 18px 18px 30px rgba(0, 0, 0, 0.8),
-                  -18px -18px 28px rgba(80, 100, 150, 0.5);
-    }
-
-    .neo-pill:active,
-    .neo-block:active {
-      transform: translateY(0);
-      box-shadow: var(--shadow-neo-in);
-    }
-
-    /* Контент формы */
-    .section-label {
-      font-size: 13px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      color: var(--accent-blue);
-      text-shadow: 0 0 7px var(--accent-blue);
-    }
-
-    .line-group {
-      margin-bottom: 20px;
-    }
-
-    .city-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .btn-contacts {
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .btn-city {
-      font-size: 14px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    .input-label {
-      font-size: 13px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      opacity: 0.7;
-    }
-
-    .input-value {
-      margin-top: 4px;
-      font-size: 18px;
-      letter-spacing: 0.28em;
-    }
-
-    .classes-label {
-      font-size: 20px;
-      text-align: center;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-    }
-
-    .bottom-cta {
-      margin-top: 26px;
-    }
-
-    .btn-cta {
-      width: 100%;
-      padding-block: 18px;
-      font-size: 15px;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-cta::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg,
-        rgba(66, 211, 255, 0.12),
-        rgba(255, 75, 209, 0.18),
-        rgba(66, 211, 255, 0.12));
-      opacity: 0;
-      transition: opacity var(--transition-fast);
-    }
-
-    .btn-cta span {
-      position: relative;
-      z-index: 1;
-    }
-
-    .btn-cta:hover::before {
-      opacity: 1;
-    }
-
-    .btn-cta:hover {
-      transform: translateY(-1px);
-      box-shadow: 20px 20px 35px rgba(0, 0, 0, 0.8),
-                  -20px -20px 32px rgba(80, 100, 150, 0.6);
-    }
-
-    /* Адаптив */
-    @media (max-width: 380px) {
-      .logo-script {
-        font-size: 26px;
-      }
-      .logo-sub {
-        font-size: 10px;
-      }
-      .classes-label {
-        font-size: 18px;
-        letter-spacing: 0.18em;
-      }
-    }
-  </style>
+/* ADAPTIVE */
+@media (max-width:480px){
+  body{padding:10px}
+  .app{border-radius:26px}
+}
+@media (min-width:900px){
+  .app{
+    max-width:460px;
+    max-height:880px;
+  }
+}
+</style>
 </head>
 <body>
-  <div class="page">
-    <main class="card">
-      <div class="card-inner">
-        <!-- Верхняя панель -->
-        <div class="top-bar">
-          <button class="burger" aria-label="Открыть меню">
-            <div class="burger-lines">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </button>
 
-          <div class="logo">
-            <div class="logo-script">
-              Night <span>Route</span>
-            </div>
-            <div class="logo-sub">
-              ночной экспресс класс
-            </div>
-          </div>
+<div class="app">
+  <div class="app-inner">
 
-          <div style="width:42px;"></div>
-        </div>
+    <!-- ВЫЕЗЖАЮЩЕЕ МЕНЮ -->
+    <div class="side-menu-overlay" id="sideMenuOverlay">
+      <div class="side-menu">
+        <div class="side-menu-title">меню</div>
+        <p>Здесь можно разместить дополнительные разделы, ссылки и информацию о компании.</p>
 
-        <!-- Стрелка -->
-        <div class="arrow-wrap">
-          <div class="arrow"></div>
-          <div class="arrow-label">начни с&nbsp;выбора города</div>
-        </div>
-
-        <!-- Выбор города -->
-        <section class="line-group">
-          <div class="section-label neon-text">выбрать город</div>
-
-          <div class="city-row">
-            <button class="neo-pill btn-contacts neon-text">
-              контакты
-            </button>
-
-            <button class="neo-pill btn-city neon-text">
-              выбрать город
-            </button>
-          </div>
-
-          <div class="neo-input">
-            <div>
-              <div class="input-label neon-text">
-                из города
-              </div>
-              <div class="input-value neon-text">
-                с&nbsp;пб
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Выбор класса -->
-        <section class="line-group">
-          <div class="classes-label neon-text">
-            выбрать класс
-          </div>
-        </section>
-
-        <!-- Нижняя большая кнопка -->
-        <section class="bottom-cta">
-          <button class="neo-block btn-cta neon-text">
-            <span>найти ночной маршрут</span>
-          </button>
-        </section>
+        <button class="side-menu-btn">контакты</button>
       </div>
-    </main>
+    </div>
+
+    <!-- МОДАЛ ВЫБОРА ГОРОДА -->
+    <div class="city-modal" id="cityModal">
+      <div class="city-panel">
+        <div class="city-panel-title">выбрать город</div>
+        <div class="city-list">
+          <button class="city-btn" data-city="Курск">Курск</button>
+          <button class="city-btn" data-city="Белгород">Белгород</button>
+          <button class="city-btn" data-city="Санкт-Петербург">Питер</button>
+        </div>
+        <button class="city-close" type="button" id="cityClose">Закрыть</button>
+      </div>
+    </div>
+
+    <!-- TOP BAR -->
+    <header class="top-bar">
+      <button class="burger" id="burgerBtn" aria-label="Открыть меню">
+        <div class="burger-lines">
+          <span></span><span></span><span></span>
+        </div>
+      </button>
+
+      <div class="title-wrap">
+        <div class="title-main">night tools</div>
+        <div class="title-sub">аренда инструмента</div>
+      </div>
+
+      <div class="top-placeholder"></div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="scroll-area">
+
+      <!-- ЛОГО БЛОК в 1/4 -->
+      <section class="logo-card">
+        <div class="logo-placeholder"></div>
+        <div class="logo-texts">
+          <div class="logo-name">night tools</div>
+          <div class="logo-tagline">
+            Ваш логотип здесь — светящийся неон, как на вывеске.
+          </div>
+        </div>
+      </section>
+
+      <!-- ОПИСАНИЕ -->
+      <section class="about">
+        Наш сайт по аренде инструментов для ремонта работает с 2010&nbsp;года —
+        мы быстрые, аккуратные, немного безумные и очень <span class="neon-blue">опасно&nbsp;крутые.</span>
+      </section>
+
+      <!-- ВЫБОР ГОРОДА -->
+      <button class="btn-primary" id="chooseCityBtn">
+        <span>выбрать город</span>
+        <span class="dot"></span>
+      </button>
+
+      <div class="selected-city" id="selectedCity">
+        Город ещё не выбран.
+      </div>
+
+      <!-- КЛАССЫ -->
+      <section class="class-chooser">
+        <div class="class-label">класс инструмента</div>
+        <div class="class-buttons">
+          <button class="class-btn active-standard" data-class="standard">standard</button>
+          <button class="class-btn" data-class="vip">vip</button>
+          <button class="class-btn" data-class="elite">elite</button>
+        </div>
+      </section>
+
+      <!-- ИНСТРУМЕНТЫ 2x2 -->
+      <section class="tools-grid">
+        <article class="tool-card">
+          <div class="tool-photo"></div>
+          <div class="tool-name">ультра дрель samsung</div>
+          <div class="tool-body">
+            Зарядка + инструмент (классический или модифицированный)<br>
+            Аренда:<br>
+            1 час — 5000 ₽<br>
+            2 часа — 10&nbsp;000 ₽<br>
+            3 часа — 20&nbsp;000 ₽<br>
+            День — 50&nbsp;000 ₽
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-photo"></div>
+          <div class="tool-name">лазерный перфоратор pro</div>
+          <div class="tool-body">
+            Зарядка + инструмент (heavy-duty)<br>
+            Аренда:<br>
+            1 час — 6000 ₽<br>
+            2 часа — 12&nbsp;000 ₽<br>
+            3 часа — 22&nbsp;000 ₽<br>
+            День — 55&nbsp;000 ₽
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-photo"></div>
+          <div class="tool-name">мультирежущий штурм</div>
+          <div class="tool-body">
+            Зарядка + инструмент (универсальный)<br>
+            Аренда:<br>
+            1 час — 4500 ₽<br>
+            2 часа — 9&nbsp;000 ₽<br>
+            3 часа — 18&nbsp;000 ₽<br>
+            День — 48&nbsp;000 ₽
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-photo"></div>
+          <div class="tool-name">ультра шлифмашина neo</div>
+          <div class="tool-body">
+            Зарядка + инструмент (чистовой ремонт)<br>
+            Аренда:<br>
+            1 час — 5200 ₽<br>
+            2 часа — 10&nbsp;400 ₽<br>
+            3 часа — 19&nbsp;500 ₽<br>
+            День — 51&nbsp;000 ₽
+          </div>
+        </article>
+      </section>
+
+      <!-- ОБЩЕЕ ОПИСАНИЕ / ДОП УСЛУГИ -->
+      <section class="tool-details">
+        <div class="tool-details-title">доп услуги</div>
+        Зарядка + инструмент (классический или модифицированный).<br>
+        Аренда:<br>
+        1 час — 5000 ₽<br>
+        2 часа — 10&nbsp;000 ₽<br>
+        3 часа — 20&nbsp;000 ₽<br>
+        День — 50&nbsp;000 ₽
+        <br><br>
+        Дополнительные услуги:<br>
+        • Насадки<br>
+        • Зарядка<br>
+        • Длинный шнур<br>
+        • Блоки питания
+      </section>
+
+      <!-- КНОПКА ЗАКАЗАТЬ -->
+      <a href="https://t.me/your_telegram_here" target="_blank" style="text-decoration:none;">
+        <button class="btn-order" type="button">
+          <div class="tg-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21.5 4.2L3.7 11.2c-1.2.5-1.1 1.2-.2 1.4l4.5 1.4 1.7 5.3c.2.5.1.7.5.7.3 0 .4-.1.6-.3l2.6-2.5 4.5 3.3c.8.5 1.3.2 1.5-.7l2.7-12.6c.3-1.2-.4-1.8-1.6-1.4zM9 13.8l8.7-5.5c.4-.2.8-.1.5.2l-7.4 6.6-.3 3.1-1.5-4.4z"/>
+            </svg>
+          </div>
+          <span>заказать</span>
+        </button>
+      </a>
+
+    </div>
   </div>
+</div>
+
+<script>
+/* Боковое меню */
+const burgerBtn = document.getElementById('burgerBtn');
+const sideMenuOverlay = document.getElementById('sideMenuOverlay');
+
+burgerBtn.addEventListener('click', () => {
+  sideMenuOverlay.classList.toggle('open');
+});
+sideMenuOverlay.addEventListener('click', (e) => {
+  if (e.target === sideMenuOverlay) {
+    sideMenuOverlay.classList.remove('open');
+  }
+});
+
+/* Выбор города */
+const chooseCityBtn = document.getElementById('chooseCityBtn');
+const cityModal = document.getElementById('cityModal');
+const cityClose = document.getElementById('cityClose');
+const selectedCityEl = document.getElementById('selectedCity');
+
+chooseCityBtn.addEventListener('click', () => {
+  cityModal.classList.add('open');
+});
+
+cityClose.addEventListener('click', () => {
+  cityModal.classList.remove('open');
+});
+
+cityModal.addEventListener('click', (e) => {
+  if (e.target === cityModal) {
+    cityModal.classList.remove('open');
+  }
+});
+
+cityModal.querySelectorAll('.city-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const city = btn.getAttribute('data-city');
+    selectedCityEl.innerHTML = 'Город: <strong>' + city + '</strong>';
+    cityModal.classList.remove('open');
+  });
+});
+
+/* Выбор класса */
+const classButtons = document.querySelectorAll('.class-btn');
+function updateClassState(activeKey){
+  classButtons.forEach(btn => {
+    btn.classList.remove('active-standard','active-vip','active-elite');
+    const key = btn.getAttribute('data-class');
+    if(key === activeKey){
+      if(key === 'standard') btn.classList.add('active-standard');
+      if(key === 'vip') btn.classList.add('active-vip');
+      if(key === 'elite') btn.classList.add('active-elite');
+    }
+  });
+}
+classButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.getAttribute('data-class');
+    updateClassState(key);
+  });
+});
+</script>
+
 </body>
 </html>
