@@ -43,6 +43,41 @@ body{
   padding:18px;
 }
 
+/* ПРЕЛОАДЕР */
+.preloader{
+  position:fixed;
+  inset:0;
+  background:#050712;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  transition:opacity 0.3s ease;
+}
+.preloader.hidden{
+  opacity:0;
+  pointer-events:none;
+}
+.preloader-spinner{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:3px solid rgba(77,215,255,0.18);
+  border-top-color:var(--accent-pink);
+  animation:preloader-spin 0.8s linear infinite;
+  margin-bottom:14px;
+}
+.preloader-text{
+  font-size:13px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+@keyframes preloader-spin{
+  to{transform:rotate(360deg);}
+}
+
 /* Основной контейнер */
 .app{
   position:relative;
@@ -345,26 +380,6 @@ body{
 .tool-body{
   color:var(--text-muted);
   line-height:1.35;
-}
-
-/* ОБЩЕЕ ОПИСАНИЕ / ДОП УСЛУГИ */
-.tool-details{
-  background: var(--bg-elevated);
-  border-radius:22px;
-  box-shadow: var(--shadow-neo-out);
-  padding:14px 14px 16px;
-  font-size:12px;
-  color:var(--text-muted);
-  line-height:1.5;
-  margin-bottom:18px;
-}
-.tool-details-title{
-  font-size:13px;
-  text-transform:uppercase;
-  letter-spacing:0.18em;
-  margin-bottom:10px;
-  color:var(--accent-blue);
-  text-shadow:0 0 8px var(--accent-blue);
 }
 
 /* Кнопка ЗАКАЗАТЬ (большая) */
@@ -755,6 +770,12 @@ body{
 </head>
 <body>
 
+<!-- ПРЕЛОАДЕР -->
+<div class="preloader" id="preloader">
+  <div class="preloader-spinner"></div>
+  <div class="preloader-text">загрузка интерфейса</div>
+</div>
+
 <div class="app">
   <div class="app-inner">
 
@@ -884,13 +905,6 @@ body{
         <!-- карточки будут подставляться скриптом -->
       </section>
 
-      <!-- ОБЩЕЕ ОПИСАНИЕ / ДОП УСЛУГИ -->
-      <section class="tool-details">
-        <div class="tool-details-title">доп услуги</div>
-        Насадки, зарядка, длинные шнуры, блоки питания и другие опции можно добавить к любому инструменту.
-        Обсудим детали в Telegram при оформлении заказа.
-      </section>
-
       <!-- КНОПКА ЗАКАЗАТЬ (общая) -->
       <a href="https://t.me/your_telegram_here" target="_blank" style="text-decoration:none;">
         <button class="btn-order" type="button">
@@ -961,6 +975,65 @@ const toolsData = [
   }
   // Добавляй свои записи по этому шаблону
 ];
+
+/* ====== ПРЕЛОАДЕР: ЖДЁМ СТРАНИЦУ И ВСЕ ФОТО ====== */
+const preloaderEl = document.getElementById('preloader');
+let windowLoaded = false;
+let imagesLoaded = false;
+
+function hidePreloader() {
+  if (!preloaderEl) return;
+  preloaderEl.classList.add('hidden');
+  setTimeout(() => {
+    preloaderEl.style.display = 'none';
+  }, 350);
+}
+
+function checkPreloaderDone() {
+  if (windowLoaded && imagesLoaded) {
+    hidePreloader();
+  }
+}
+
+function preloadToolImages() {
+  const urls = [];
+  toolsData.forEach(t => {
+    if (t.photos && t.photos.length) {
+      t.photos.forEach(u => {
+        if (typeof u === 'string' && u.trim()) {
+          urls.push(u.trim());
+        }
+      });
+    }
+  });
+
+  // если фоток пока нет — считаем, что они уже "загружены"
+  if (!urls.length) {
+    imagesLoaded = true;
+    checkPreloaderDone();
+    return;
+  }
+
+  let loaded = 0;
+  urls.forEach(src => {
+    const img = new Image();
+    img.onload = img.onerror = function() {
+      loaded++;
+      if (loaded === urls.length) {
+        imagesLoaded = true;
+        checkPreloaderDone();
+      }
+    };
+    img.src = src;
+  });
+}
+
+window.addEventListener('load', () => {
+  windowLoaded = true;
+  checkPreloaderDone();
+});
+
+preloadToolImages();
 
 /* ====== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====== */
 let selectedCity = null;    // 'kursk' | 'belgorod' | 'spb'
