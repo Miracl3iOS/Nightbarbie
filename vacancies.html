@@ -18,6 +18,7 @@
 
   --text-muted: #9aa3c2;
 
+  --radius-xl: 28px;
   --shadow-neo-out: 18px 18px 36px rgba(0,0,0,0.9),
                     -14px -14px 30px rgba(60,80,130,0.35);
   --shadow-neo-in: inset 16px 16px 30px rgba(0,0,0,0.9),
@@ -41,7 +42,7 @@ body{
   padding:18px;
 }
 
-/* APP */
+/* Основной контейнер */
 .app{
   position:relative;
   width:100%;
@@ -55,6 +56,8 @@ body{
     0 0 0 1px rgba(120,140,200,0.12);
   overflow:hidden;
 }
+
+/* Внутренняя карточка */
 .app-inner{
   position:relative;
   height:100%;
@@ -70,6 +73,8 @@ body{
   justify-content:space-between;
   margin-bottom:10px;
 }
+
+/* Бургер */
 .burger{
   width:40px;
   height:40px;
@@ -102,6 +107,8 @@ body{
   box-shadow: 14px 14px 26px rgba(0,0,0,0.9),
               -12px -12px 24px rgba(60,80,130,0.5);
 }
+
+/* Заголовок-неон */
 .title-wrap{
   flex:1;
   text-align:center;
@@ -126,9 +133,10 @@ body{
     0 0 10px var(--accent-pink),
     0 0 26px var(--accent-pink);
 }
+
 .top-placeholder{width:40px}
 
-/* SIDE MENU — КОПИЯ С ГЛАВНОЙ */
+/* SIDE MENU */
 .side-menu-overlay{
   position:absolute;
   inset:0;
@@ -155,7 +163,7 @@ body{
   border-radius:0 26px 26px 0;
   display:flex;
   flex-direction:column;
-  gap:16px;
+  gap:12px;
 }
 .side-menu-title{
   font-size:14px;
@@ -169,8 +177,16 @@ body{
   color:var(--text-muted);
   line-height:1.4;
 }
+
+/* ССЫЛКИ В МЕНЮ */
+.side-menu a{
+  text-decoration:none;
+  display:flex;        /* чтобы кнопка тянулась на всю ширину */
+}
+
+/* КНОПКИ МЕНЮ (делаем все одинаковые, как "контакты") */
 .side-menu-btn{
-  margin-top:auto;
+  width:100%;
   border-radius:16px;
   border:none;
   padding:10px 14px;
@@ -184,25 +200,31 @@ body{
   box-shadow: var(--shadow-neo-out);
 }
 
-/* CONTENT */
+/* КОНТЕНТ */
 .scroll-area{
   margin-top:8px;
   flex:1;
   overflow-y:auto;
   padding:4px 2px 6px;
 }
+
+/* Заголовок блока вакансий */
 .vacancies-header{
   text-align:center;
   font-size:13px;
   color:var(--text-muted);
   margin-bottom:12px;
 }
+
+/* СЕТКА КАРТОЧЕК (как инструменты) */
 .vacancy-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:12px;
   margin-bottom:18px;
 }
+
+/* Карточка 1в1 как tool-card */
 .vacancy-card{
   background: var(--bg-card);
   border-radius:20px;
@@ -220,6 +242,8 @@ body{
   box-shadow:20px 20px 38px rgba(0,0,0,0.95),
              -16px -16px 30px rgba(60,80,130,0.6);
 }
+
+/* Фото (1в1 с tool-photo) */
 .vacancy-photo{
   width:100%;
   aspect-ratio:3/4;
@@ -230,6 +254,8 @@ body{
   background-size:cover;
   background-position:center;
 }
+
+/* Название вакансии (как tool-name) */
 .vacancy-name{
   font-size:12px;
   font-weight:600;
@@ -238,6 +264,8 @@ body{
   color:var(--accent-blue);
   text-shadow:0 0 8px var(--accent-blue);
 }
+
+/* Текст (как tool-body) */
 .vacancy-body{
   color:var(--text-muted);
   line-height:1.35;
@@ -259,7 +287,7 @@ body{
   cursor:pointer;
 }
 
-/* Кнопка РАБОТАТЬ (общая) */
+/* Кнопка РАБОТАТЬ (с ТГ) — общая */
 .btn-work{
   width:100%;
   border-radius:20px;
@@ -322,7 +350,7 @@ body{
   fill:#fff;
 }
 
-/* МОДАЛ ВАКАНСИИ */
+/* МОДАЛ ВАКАНСИИ (как модал инструмента) */
 .job-modal{
   position:absolute;
   inset:0;
@@ -436,7 +464,7 @@ body{
   line-height:1.5;
 }
 
-/* Кнопка РАБОТАТЬ в модалке */
+/* Кнопка "работать" в модалке (маленькая) */
 .job-panel-footer{
   margin-top:10px;
 }
@@ -485,8 +513,9 @@ body{
   opacity:1;
 }
 
-/* SCROLLBARS */
+/* SCROLLBAR */
 .scroll-area::-webkit-scrollbar{width:4px}
+.scroll-area::-webkit-scrollbar-track{background:transparent}
 .scroll-area::-webkit-scrollbar-thumb{
   background:rgba(100,120,170,0.7);
   border-radius:999px;
@@ -515,14 +544,21 @@ body{
 <div class="app">
   <div class="app-inner">
 
-    <!-- ВЫЕЗЖАЮЩЕЕ МЕНЮ (КОПИЯ С ГЛАВНОЙ) -->
+    <!-- ВЫЕЗЖАЮЩЕЕ МЕНЮ -->
     <div class="side-menu-overlay" id="sideMenuOverlay">
       <div class="side-menu">
         <div class="side-menu-title">меню</div>
-        <p>Здесь можно разместить дополнительные разделы, ссылки и информацию о компании.</p>
+        <p>Night Tools — аренда инструмента и ночной сервис для своих.</p>
 
-        <button class="side-menu-btn">контакты</button>
-        <button class="side-menu-btn">вакансии</button>
+        <a href="index.html">
+          <button class="side-menu-btn" type="button">главная</button>
+        </a>
+
+        <button class="side-menu-btn" type="button">контакты</button>
+
+        <a href="vacancies.html">
+          <button class="side-menu-btn" type="button">вакансии</button>
+        </a>
       </div>
     </div>
 
@@ -586,7 +622,7 @@ body{
       </div>
 
       <section class="vacancy-grid" id="vacancyGrid">
-        <!-- карточки ставит JS -->
+        <!-- карточки подставит JS -->
       </section>
 
       <button class="back-btn" type="button" onclick="history.back()">назад</button>
@@ -630,6 +666,7 @@ const vacancies = [
       'images/vacancies/manager-1.jpg'
     ]
   }
+  // по аналогии можешь добавлять ещё вакансии
 ];
 
 /* ЭЛЕМЕНТЫ */
@@ -651,7 +688,7 @@ let currentVacanciesList = [];
 let currentVacancyIndex = 0;
 let currentJobPhotoIndex = 0;
 
-/* SIDE MENU */
+/* Боковое меню */
 burgerBtn.addEventListener('click', () => {
   sideMenuOverlay.classList.toggle('open');
 });
@@ -661,8 +698,8 @@ sideMenuOverlay.addEventListener('click', (e) => {
   }
 });
 
-/* РЕНДЕР КАРТОЧЕК */
-function renderVacanciesGrid() {
+/* Рендер карточек */
+function renderVacanciesGrid(){
   vacancyGrid.innerHTML = '';
   currentVacanciesList = vacancies.filter(v => v.enabled !== false);
 
@@ -678,8 +715,8 @@ function renderVacanciesGrid() {
     `;
 
     const photoDiv = card.querySelector('.vacancy-photo');
-    if (v.photos && v.photos.length > 0) {
-      photoDiv.style.backgroundImage = \`url('${v.photos[0]}')\`;
+    if (v.photos && v.photos.length > 0){
+      photoDiv.style.backgroundImage = `url('${v.photos[0]}')`;
     }
 
     card.addEventListener('click', () => openJobDetail(v.id));
@@ -687,18 +724,19 @@ function renderVacanciesGrid() {
   });
 }
 
-/* МОДАЛ ВАКАНСИИ */
-function openJobDetail(id) {
+/* Открытие модалки вакансии */
+function openJobDetail(id){
   const idx = currentVacanciesList.findIndex(v => v.id === id);
   if (idx === -1) return;
 
   currentVacancyIndex = idx;
   currentJobPhotoIndex = 0;
+
   updateJobDetailView();
   jobModal.classList.add('open');
 }
 
-function closeJobDetail() {
+function closeJobDetail(){
   jobModal.classList.remove('open');
 }
 
@@ -707,7 +745,7 @@ jobModal.addEventListener('click', (e) => {
   if (e.target === jobModal) closeJobDetail();
 });
 
-function updateJobDetailView() {
+function updateJobDetailView(){
   const job = currentVacanciesList[currentVacancyIndex];
   if (!job) return;
 
@@ -715,7 +753,7 @@ function updateJobDetailView() {
   jobPanelDesc.innerHTML = job.description.replace(/\n/g,'<br>');
 
   const photos = job.photos && job.photos.length ? job.photos : null;
-  if (photos) {
+  if (photos){
     const src = photos[currentJobPhotoIndex] || photos[0];
     jobPhotoLarge.style.backgroundImage = `url('${src}')`;
   } else {
@@ -724,7 +762,7 @@ function updateJobDetailView() {
 
   jobDots.innerHTML = '';
   const count = photos ? photos.length : 1;
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i++){
     const dot = document.createElement('span');
     dot.className = 'job-dot' + (i === currentJobPhotoIndex ? ' active' : '');
     dot.dataset.index = i;
