@@ -679,18 +679,6 @@ body{
   font-size:12px;
   color:var(--text-muted);
   line-height:1.5;
-  margin-bottom:8px;
-}
-.tool-panel-prices{
-  font-size:12px;
-  color:var(--text-muted);
-  line-height:1.4;
-  margin-bottom:8px;
-}
-.tool-panel-extras{
-  font-size:12px;
-  color:var(--text-muted);
-  line-height:1.4;
 }
 
 /* Кнопка заказа в модалке */
@@ -821,8 +809,6 @@ body{
         <div class="tool-panel-body">
           <div class="tool-panel-name" id="toolPanelName"></div>
           <div class="tool-panel-text" id="toolPanelDesc"></div>
-          <div class="tool-panel-prices" id="toolPanelPrices"></div>
-          <div class="tool-panel-extras" id="toolPanelExtras"></div>
         </div>
 
         <div class="tool-panel-footer">
@@ -932,10 +918,8 @@ const toolsData = [
     clazz: 'standard',
     name: 'Ультра дрель Samsung',
     shortTitle: 'ультра дрель samsung',
-    description: 'Зарядка + инструмент (классический или модифицированный).',
-    prices: { hour1: 5000, hour2: 10000, hour3: 20000, day: 50000 },
-    extras: ['Насадки', 'Зарядка', 'Длинный шнур', 'Блоки питания'],
-    photos: [] // добавишь свои URL, до 6 штук
+    description: 'Здесь ты сам вписываешь весь текст: описание, цены, допы — как хочешь.',
+    photos: [] // сюда добавляешь URL картинок: ['images/tools/ultra-1.jpg', ...]
   },
   {
     id: 'laser-perf-pro',
@@ -944,9 +928,7 @@ const toolsData = [
     clazz: 'standard',
     name: 'Лазерный перфоратор PRO',
     shortTitle: 'лазерный перфоратор pro',
-    description: 'Зарядка + инструмент (heavy-duty).',
-    prices: { hour1: 6000, hour2: 12000, hour3: 22000, day: 55000 },
-    extras: ['Насадки', 'Зарядка'],
+    description: 'Любой кастомный текст по этому инструменту. Можно с переносами, ценами и прочим.',
     photos: []
   },
   {
@@ -956,9 +938,7 @@ const toolsData = [
     clazz: 'vip',
     name: 'Мультирежущий Штурм',
     shortTitle: 'мультирежущий штурм',
-    description: 'Зарядка + универсальный инструмент для сложных задач.',
-    prices: { hour1: 4500, hour2: 9000, hour3: 18000, day: 48000 },
-    extras: ['Насадки', 'Блоки питания'],
+    description: 'Описание для VIP-класса в Питере. Тут тоже всё пишешь сам.',
     photos: []
   },
   {
@@ -968,9 +948,7 @@ const toolsData = [
     clazz: 'elite',
     name: 'Ультра шлифмашина NEO',
     shortTitle: 'ультра шлифмашина neo',
-    description: 'Инструмент для чистового ремонта и финишных работ.',
-    prices: { hour1: 5200, hour2: 10400, hour3: 19500, day: 51000 },
-    extras: ['Насадки', 'Длинный шнур'],
+    description: 'Описание, цены, доп. услуги — всё внутри одной строки/многострочного текста.',
     photos: []
   }
   // Добавляй свои записи по этому шаблону
@@ -1007,7 +985,6 @@ function preloadToolImages() {
     }
   });
 
-  // если фоток пока нет — считаем, что они уже "загружены"
   if (!urls.length) {
     imagesLoaded = true;
     checkPreloaderDone();
@@ -1067,8 +1044,6 @@ const toolDots = document.getElementById('toolDots');
 const toolCount = document.getElementById('toolCount');
 const toolPanelName = document.getElementById('toolPanelName');
 const toolPanelDesc = document.getElementById('toolPanelDesc');
-const toolPanelPrices = document.getElementById('toolPanelPrices');
-const toolPanelExtras = document.getElementById('toolPanelExtras');
 
 let currentToolsList = [];
 let currentToolIndex = 0;
@@ -1119,22 +1094,11 @@ function renderToolsGrid() {
     card.className = 'tool-card';
     card.dataset.toolId = tool.id;
 
-    const price = tool.prices || {};
-    const h1 = price.hour1 ?? '-';
-    const h2 = price.hour2 ?? '-';
-    const h3 = price.hour3 ?? '-';
-    const day = price.day ?? '-';
-
     card.innerHTML = `
       <div class="tool-photo"></div>
       <div class="tool-name">${tool.shortTitle}</div>
       <div class="tool-body">
-        ${tool.description}<br>
-        Аренда:<br>
-        1 час — ${h1.toLocaleString('ru-RU')} ₽<br>
-        2 часа — ${h2.toLocaleString('ru-RU')} ₽<br>
-        3 часа — ${h3.toLocaleString('ru-RU')} ₽<br>
-        День — ${day.toLocaleString('ru-RU')} ₽
+        ${tool.description}
       </div>
     `;
 
@@ -1235,26 +1199,6 @@ function updateToolDetailView() {
   toolPanelName.textContent = tool.name;
   toolPanelDesc.textContent = tool.description;
 
-  const p = tool.prices || {};
-  const h1 = p.hour1 ?? '-';
-  const h2 = p.hour2 ?? '-';
-  const h3 = p.hour3 ?? '-';
-  const day = p.day ?? '-';
-
-  toolPanelPrices.innerHTML =
-    'Аренда:<br>' +
-    '1 час — ' + h1.toLocaleString('ru-RU') + ' ₽<br>' +
-    '2 часа — ' + h2.toLocaleString('ru-RU') + ' ₽<br>' +
-    '3 часа — ' + h3.toLocaleString('ru-RU') + ' ₽<br>' +
-    'День — ' + day.toLocaleString('ru-RU') + ' ₽';
-
-  const extras = tool.extras || [];
-  if (extras.length) {
-    toolPanelExtras.innerHTML = 'Доп услуги:<br>• ' + extras.join('<br>• ');
-  } else {
-    toolPanelExtras.textContent = '';
-  }
-
   const photos = tool.photos && tool.photos.length ? tool.photos : null;
   if (photos) {
     const src = photos[currentPhotoIndex] || photos[0];
@@ -1263,7 +1207,6 @@ function updateToolDetailView() {
     toolPhotoLarge.style.backgroundImage = '';
   }
 
-  // точки
   toolDots.innerHTML = '';
   const count = photos ? photos.length : 1;
   for (let i = 0; i < count; i++) {
