@@ -210,7 +210,12 @@ body{
   height:120px;
   border-radius:30px;
   margin:6px auto 18px;
-  background:url('images/logo.png') center/cover no-repeat;
+  background-color:#0d111f;
+  background-image:url('images/logo.png');
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:contain;   /* ✅ ВОТ ЭТО ГЛАВНОЕ */
+  overflow:hidden;          /* ✅ ОБРЕЗАЕТ ВЫХОД ЗА КРАЯ */
   box-shadow:
     0 0 18px rgba(77,215,255,0.9),
     0 0 28px rgba(255,87,224,0.8);
