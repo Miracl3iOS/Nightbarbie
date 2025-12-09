@@ -198,8 +198,12 @@ body{
   width:72px;
   height:72px;
   border-radius:24px;
-  background: radial-gradient(circle at 30% 20%, rgba(77,215,255,0.85), transparent 55%),
-              radial-gradient(circle at 80% 80%, rgba(255,87,224,0.8), transparent 60%);
+  background-color:#0d111f;
+  background-image:url('logo.png');   /* ✅ ТУТ ТВОЁ ЛОГО */
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:contain;                   /* ✅ НЕ РЕЖЕТ */
+  overflow:hidden;                          /* ✅ НЕ ВЫЛЕЗАЕТ */
   box-shadow:
     0 0 18px rgba(77,215,255,0.9),
     0 0 34px rgba(255,87,224,0.85);
