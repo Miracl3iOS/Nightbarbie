@@ -1,0 +1,230 @@
+/* global React, Icon, CtaBanner */
+const { useState: useStateLegal } = React;
+
+function PageLegal({ setPage, accent, openChat }) {
+  const [open, setOpen] = useStateLegal(0);
+
+  const services = [
+    {
+      tag: "Бизнес",
+      t: "Регистрация и открытие компании",
+      d: "Помощь с созданием компании в Таиланде — от выбора формы до подачи документов."
+    },
+    {
+      tag: "Бизнес",
+      t: "Релокация бизнеса",
+      d: "Сопровождение переноса или запуска бизнеса в Таиланде — структура, документы, найм."
+    },
+    {
+      tag: "Финансы",
+      t: "Бухгалтерские услуги",
+      d: "Бухгалтерское сопровождение компании на постоянной основе или по запросу."
+    },
+    {
+      tag: "Лицензии",
+      t: "Получение лицензии",
+      d: "Помощь с оформлением лицензий для деятельности в Таиланде."
+    },
+    {
+      tag: "Документы",
+      t: "Нотариальные услуги",
+      d: "Нотариальное оформление и заверение документов."
+    },
+    {
+      tag: "Документы",
+      t: "Составление договоров",
+      d: "Подготовка договоров разных форматов — купли-продажи, аренды, услуг, NDA."
+    },
+    {
+      tag: "Документы",
+      t: "Переводы документов",
+      d: "Перевод документов для юридических, визовых и корпоративных целей."
+    },
+    {
+      tag: "Недвижимость",
+      t: "Сопровождение сделки купли-продажи недвижимости",
+      d: "Юридическая поддержка при покупке или продаже недвижимости — проверка, договор, регистрация."
+    },
+    {
+      tag: "Консультация",
+      t: "Индивидуальная консультация до 1 часа",
+      d: "Консультация по конкретной ситуации клиента — иммиграция, бизнес, право."
+    },
+  ];
+
+  const areas = [
+    { area: "Иммиграция", items: ["визы", "разрешения на работу", "оформление work permit"] },
+    { area: "Корпоративное право", items: ["регистрация компаний", "изменение типа компании", "ликвидация компаний"] },
+    { area: "Недвижимость", items: ["покупка / продажа", "управление", "проверка чистоты сделки"] },
+    { area: "Семейное право", items: ["брак", "развод", "опека над детьми", "наследство"] },
+    { area: "Трудовое право", items: ["трудовые договоры", "споры с работодателем", "оформление сотрудников"] },
+    { area: "Документы", items: ["нотариус", "переводы", "договоры", "доверенности"] },
+  ];
+
+  const faq = [
+    { q: "Сколько стоит юридическая услуга?", a: "Фиксированных цен нет — каждый кейс индивидуален. Опишите задачу в чате, мы рассчитаем стоимость и пришлём смету в течение часа." },
+    { q: "Работаете по договору?", a: "Да, всегда. Договор, фиксированная стоимость по этапам, оплата частями. NDA на конфиденциальность входит в стандарт." },
+    { q: "Можно ли всё сделать дистанционно?", a: "Большую часть кейсов — да: переписка в чате, отправка сканов, видео-консультация, нотариальные действия по доверенности." },
+    { q: "Работаете только в Таиланде?", a: "Юридически мы работаем по Таиланду. Документы из РФ, апостили и переводы — оформляем партнёрами, чтобы вам не разъезжать." },
+    { q: "Конфиденциальность?", a: "Подписываем NDA, храним данные в зашифрованном виде, не передаём третьим лицам. Это база." },
+  ];
+
+  return (
+    <main data-screen-label="Legal">
+      {/* HERO */}
+      <section className="page-hero" data-screen-label="Legal / Hero">
+        <div className="container">
+          <div className="crumb">Главная <span className="sep">/</span> Юр услуги</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 32, alignItems: "center" }}>
+            <div>
+              <div className="eyebrow pink" style={{ background: accent, marginBottom: 18 }}>★ юристы в Таиланде</div>
+              <h1 style={{ fontSize: "clamp(46px, 6.6vw, 100px)" }}>
+                Юр услуги<br/>в Таиланде.<br/>
+                <span className="hl" style={{ background: accent }}>Без воды.</span>
+              </h1>
+              <p className="lead" style={{ marginTop: 18, fontSize: 17 }}>
+                Бизнес, компании, лицензии, бухгалтерия, недвижимость, договоры, переводы,
+                иммиграция, семейные вопросы и work permit. Опытные юристы по Таиланду.
+              </p>
+              <div className="hero-cta-row">
+                <button className="btn btn-primary btn-lg" style={{ background: accent }} onClick={openChat}>
+                  Получить консультацию <Icon.Arrow/>
+                </button>
+                <a className="btn btn-ghost btn-lg" href="#services-list">Все услуги</a>
+              </div>
+            </div>
+            <div style={{ position: "relative" }}>
+              <div className="card" style={{ padding: 28, background: accent, color: "white", border: "none" }}>
+                <div className="card-tag" style={{ background: "rgba(255,255,255,0.18)", color: "white" }}>★ цена</div>
+                <h3 style={{ fontSize: 30, color: "white", marginTop: 4 }}>Стоимость — индивидуально</h3>
+                <p style={{ color: "rgba(255,255,255,0.92)", margin: 0, fontSize: 15 }}>
+                  У нас нет «прайс-листа на всё», потому что задачи разные.
+                  Опишите ситуацию — пришлём смету и план.
+                </p>
+                <button className="btn btn-ink" style={{ marginTop: 18, alignSelf: "flex-start" }} onClick={openChat}>
+                  Уточнить стоимость <Icon.Arrow/>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICE LIST */}
+      <section className="section" id="services-list" data-screen-label="Legal / Services">
+        <div className="container">
+          <div className="section-head">
+            <div className="left">
+              <div className="eyebrow">★ что мы делаем</div>
+              <h2>9 юридических<br/>услуг под ключ.</h2>
+            </div>
+            <p className="lead" style={{ maxWidth: 360 }}>
+              Не нашли свою задачу — напишите. У нас есть опыт по нестандартным кейсам.
+            </p>
+          </div>
+
+          <div className="grid grid-3">
+            {services.map((s, i) => (
+              <div key={i} className={"card " + (i === 0 || i === 4 ? "card-pink" : "")} style={i === 0 || i === 4 ? { background: accent } : null}>
+                <div className="card-tag" style={i === 0 || i === 4 ? null : { background: accent + "22", color: accent }}>{s.tag}</div>
+                <div className="card-title">{s.t}</div>
+                <p style={{ margin: 0, fontSize: 14, color: i === 0 || i === 4 ? "rgba(255,255,255,0.92)" : "var(--muted)" }}>{s.d}</p>
+                <div className="card-row">
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.7 }}>цена индивидуально</div>
+                  <div className="arrow" onClick={openChat}><Icon.Arrow/></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* AREAS OF PRACTICE */}
+      <section className="section" style={{ background: "var(--ink)", color: "var(--cream)" }} data-screen-label="Legal / Areas">
+        <div className="container">
+          <div className="section-head">
+            <div className="left">
+              <div className="eyebrow pink" style={{ background: accent }}>★ направления</div>
+              <h2 style={{ color: "var(--cream)" }}>Опытные юристы по<br/><span className="hl" style={{ background: accent }}>5 направлениям</span> права.</h2>
+              <p className="lead" style={{ color: "rgba(255,251,247,0.75)", marginTop: 14, maxWidth: 600 }}>
+                Иммиграция, корпоративное, недвижимость, семейное и трудовое право — основные сферы,
+                в которых мы работаем по Таиланду.
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-3">
+            {areas.map((a, i) => (
+              <div key={i} className="card" style={{ background: "rgba(255,251,247,0.04)", border: "1px solid rgba(255,251,247,0.1)" }}>
+                <div className="card-num" style={{ color: accent, fontSize: 36 }}>0{i + 1}</div>
+                <h3 style={{ color: "var(--cream)", fontSize: 22 }}>{a.area}</h3>
+                <ul className="checks">
+                  {a.items.map((it, j) => <li key={j} style={{ color: "rgba(255,251,247,0.85)", fontSize: 14 }}>{it}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST BLOCK */}
+      <section className="section" style={{ background: "var(--pink-wash)" }} data-screen-label="Legal / Trust">
+        <div className="container">
+          <div className="media-row">
+            <div>
+              <div className="eyebrow">★ почему нам доверяют</div>
+              <h2 style={{ marginTop: 12 }}>Юристы, которые<br/>отвечают <span className="hl" style={{ background: accent }}>результатом</span>.</h2>
+              <p className="lead" style={{ marginTop: 18 }}>
+                Небольшая команда практикующих юристов в Таиланде. Минимум формализма,
+                максимум полезного действия. Не продаём «премиум-консультации» — берём задачи,
+                которые реально можем решить.
+              </p>
+              <ul className="checks" style={{ marginTop: 22 }}>
+                <li>Практика по Таиланду — иммиграция, бизнес, недвижимость</li>
+                <li>Партнёрская сеть нотариусов и переводчиков</li>
+                <li>Договор с фикс прайсом, никаких «всплывших» комиссий</li>
+                <li>NDA и конфиденциальность как стандарт</li>
+                <li>Поддержка в режиме чата — не звонят с городского</li>
+              </ul>
+            </div>
+            <div className="media-frame">
+              <div className="sticker">★ thai bear · legal</div>
+              <image-slot id="legal-trust-bear" placeholder="перетащите арт-маскота" shape="rounded" radius="22"></image-slot>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="section" data-screen-label="Legal / FAQ">
+        <div className="container">
+          <div className="section-head">
+            <div className="left">
+              <div className="eyebrow">★ вопросы</div>
+              <h2>Спрашивают чаще всего.</h2>
+            </div>
+          </div>
+          <div style={{ maxWidth: 880 }}>
+            {faq.map((f, i) => (
+              <div key={i} className={"faq-item " + (open === i ? "open" : "")} onClick={() => setOpen(open === i ? -1 : i)}>
+                <div className="faq-q">
+                  <span>{f.q}</span>
+                  <span className="ico"><Icon.Plus/></span>
+                </div>
+                <div className="faq-a">{f.a}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CtaBanner
+        title="Расскажите задачу — посчитаем стоимость."
+        sub="Опишите ситуацию в чате или мессенджере. Если возьмёмся — пришлём смету и план. Если нет — честно скажем."
+        accent={accent}
+        openChat={openChat}
+      />
+    </main>
+  );
+}
+
+window.PageLegal = PageLegal;

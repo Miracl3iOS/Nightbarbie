@@ -1,0 +1,374 @@
+/* global React, Icon, Ticker, CtaBanner */
+const { useState: useStateVisas } = React;
+
+function PageVisas({ setPage, accent, openChat }) {
+  const [cat, setCat] = useStateVisas("Все");
+  const [open, setOpen] = useStateVisas(0);
+
+  const categories = ["Все", "Thai Elite", "Туризм", "Пенсионная", "Рабочая", "DTV"];
+
+  const eliteTiers = [
+    {
+      name: "Bronze",
+      yrs: "5 лет",
+      price: "650 000 ฿",
+      points: "—",
+      tag: "вход в систему",
+      highlights: [
+        "Мультивиза на 5 лет",
+        "По 1 году пребывания при каждом въезде",
+        "Premium Lane и Lounge в аэропортах",
+        "Без баллов привилегий"
+      ],
+      featured: false
+    },
+    {
+      name: "Gold",
+      yrs: "5 лет",
+      price: "900 000 ฿",
+      points: "20 баллов",
+      tag: "популярный",
+      highlights: [
+        "20 баллов привилегий в год",
+        "VIP-встреча в аэропорту и лаундж",
+        "Ускоренная иммиграция",
+        "Медосмотр и скидки у партнёров"
+      ],
+      featured: true
+    },
+    {
+      name: "Platinum",
+      yrs: "10 лет",
+      price: "1 500 000 ฿",
+      points: "35 баллов",
+      tag: "10 лет",
+      highlights: [
+        "35 баллов привилегий в год",
+        "Можно добавить членов семьи",
+        "Все VIP-привилегии и сопровождение",
+        "10 лет резидентства без работы"
+      ],
+      featured: false
+    },
+    {
+      name: "Diamond",
+      yrs: "15 лет",
+      price: "2 500 000 ฿",
+      points: "55 баллов",
+      tag: "максимум",
+      highlights: [
+        "55 баллов привилегий в год",
+        "Семья включена (за доплату)",
+        "Максимум долгосрочных привилегий",
+        "Сопровождение на каждом этапе"
+      ],
+      featured: false
+    },
+  ];
+
+  const thaiVisas = [
+    {
+      c: "Туризм",
+      icon: "🏝",
+      name: "Туристическая",
+      sub: "Visa для отдыха и осмотра достопримечательностей",
+      price: "от 23 000 ₽",
+      time: "6 рабочих дней",
+      stay: "60 + 30 дней",
+      what: "Загранпаспорт и фото — остальное за нас. Коридор въезда 90 дней, активация на 60, продление на 30.",
+      types: ["Однократная — 3 мес.", "Многократная — 6 мес.", "По прибытии — для отдельных стран"]
+    },
+    {
+      c: "Пенсионная",
+      icon: "🌴",
+      name: "Пенсионная",
+      sub: "1 год пребывания, ежегодное продление",
+      price: "90 000 ₽",
+      time: "2 недели",
+      stay: "365 дней / год",
+      what: "Для граждан от 50 лет. Без счёта в 800 000 ฿ — оформляем под ключ. Бессрочно продлеваемо.",
+      types: ["Возраст 50+", "Без работы в Таиланде", "Документы: паспорт, фото, справка с Госуслуг"]
+    },
+    {
+      c: "Рабочая",
+      icon: "💼",
+      name: "Рабочая виза + Work Permit",
+      sub: "Легальная работа и Work Permit под ключ",
+      price: "180 000 ฿",
+      time: "от 6 раб. дней",
+      stay: "3 + 12 мес.",
+      what: "Бизнес-виза на 3 месяца + Work Permit + продление на 12 месяцев + налоги на содержание.",
+      types: ["Полный пакет — 180 000 ฿", "Бизнес-виза NON-B — 35 000 ₽", "Подача через Москву, без присутствия"]
+    },
+    {
+      c: "DTV",
+      icon: "💻",
+      name: "DTV — Destination Thailand Visa",
+      sub: "Для удалёнщиков, фрилансеров и nomads",
+      price: "от 160 000 ₽",
+      time: "10 раб. дней",
+      stay: "5 лет",
+      what: "Без личного присутствия и без денег на счёте. Для граждан РФ — оформляем из любой точки мира.",
+      types: ["С документами — 160 000 ₽", "Только паспорт+фото — 180 000 ₽", "Срок визы 5 лет"]
+    },
+  ];
+
+  const otherCountries = [];
+
+  const extras = [
+    "Border-run и visa-run",
+    "Fast Track в аэропортах",
+    "Проход паспортного контроля",
+    "Бронь жилья для подачи",
+    "Помощь со страховкой",
+    "90-day report",
+    "Открытие банковского счёта",
+    "Получение водительских прав"
+  ];
+
+  const faq = [
+    { q: "Чем Thai Elite Visa отличается от обычной туристической?", a: "Elite — это долгосрочная привилегированная виза на 5/10/15 лет с VIP-сопровождением, fast-track в аэропортах, помощью с банковским счётом, водительскими правами, 90-day report и скидками у партнёров. Туристическая — только пребывание, без сервиса." },
+    { q: "Можно ли по Thai Elite работать в Таиланде?", a: "Нет. Elite Visa — долгосрочная туристическая, она не даёт права на работу или ведение бизнеса в Таиланде. Для работы нужны Work Visa и Work Permit — мы их тоже оформляем." },
+    { q: "Нужно ли иметь 800 000 ฿ на счёте для пенсионной?", a: "При самостоятельной подаче — да, это базовое требование иммиграции. Через нас — нет: оформляем пенсионную визу под ключ за 90 000 ₽ без требований к счёту." },
+    { q: "Можно ли оформить DTV без личного присутствия?", a: "Да. DTV оформляется без присутствия и без требований к счёту. Для граждан РФ принимаем заявку из любой точки мира — мы подадим документы через РФ." },
+    { q: "Работаете по договору?", a: "Да, всегда. Договор, фикс прайс, оплата по этапам. NDA на конфиденциальность. Возможна оплата в рублях, батах, USDT или картой." },
+  ];
+
+  const filtered = (() => {
+    if (cat === "Все") return null;
+    if (cat === "Thai Elite") return "elite";
+    return thaiVisas.filter(v => v.c === cat);
+  })();
+
+  return (
+    <main data-screen-label="Visas">
+      {/* HERO */}
+      <section className="page-hero" style={{ background: "var(--pink-wash)" }} data-screen-label="Visas / Hero">
+        <div className="container">
+          <div className="crumb">Главная <span className="sep">/</span> Визы Таиланда</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 32, alignItems: "center" }}>
+            <div>
+              <div className="eyebrow pink" style={{ background: accent, marginBottom: 18 }}>★ Таиланд · 5 типов виз · от 23 000 ₽</div>
+              <h1 style={{ fontSize: "clamp(46px, 6.6vw, 100px)" }}>
+                Все визы Таиланда.<br/>
+                <span className="hl" style={{ background: accent }}>Под ключ.</span> Под вас.
+              </h1>
+              <p className="lead" style={{ marginTop: 18, fontSize: 17 }}>
+                Thai Elite, рабочая, пенсионная, туристическая, DTV. Плюс сопровождение,
+                юр услуги и обмен валют. Без вашего личного присутствия.
+              </p>
+              <div className="hero-cta-row">
+                <button className="btn btn-primary btn-lg" style={{ background: accent }} onClick={openChat}>
+                  Подобрать визу <Icon.Arrow/>
+                </button>
+                <a className="btn btn-ghost btn-lg" href="#elite">Thai Elite</a>
+              </div>
+            </div>
+            <div style={{ position: "relative" }}>
+              <div className="slot-wrap pink-22" style={{ maxWidth: 460, marginLeft: "auto", aspectRatio: "1/1", borderRadius: "var(--r-lg)" }}>
+                <div className="slot-label">медведь · виза-герой</div>
+                <image-slot id="visas-hero-bear" placeholder="перетащите арт" shape="rounded" radius="22"></image-slot>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="section section-sm" data-screen-label="Visas / Stats">
+        <div className="container">
+          <div className="grid grid-4">
+            <div className="bignum"><div className="n" style={{ color: accent }}>5</div><h4>типов виз</h4><p>Elite, рабочая, пенсионная, туристическая, DTV — все под одной крышей.</p></div>
+            <div className="bignum"><div className="n" style={{ color: accent }}>15y</div><h4>максимум</h4><p>Thai Elite Diamond — 15 лет резидентства в Таиланде.</p></div>
+            <div className="bignum"><div className="n" style={{ color: accent }}>97%</div><h4>одобрений</h4><p>Готовим документы так, что отказы — статистическая аномалия.</p></div>
+            <div className="bignum"><div className="n" style={{ color: accent }}>0</div><h4>присутствие</h4><p>Большинство виз оформляем без вашего личного присутствия.</p></div>
+          </div>
+        </div>
+      </section>
+
+      {/* CATEGORY FILTER */}
+      <section className="section section-sm" data-screen-label="Visas / Filter">
+        <div className="container">
+          <div className="pill-row">
+            {categories.map(c => (
+              <button
+                key={c}
+                className={"pill " + (cat === c ? "active" : "")}
+                onClick={() => setCat(c)}
+                style={cat === c ? { background: accent, color: "white", borderColor: accent } : null}
+              >{c}</button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* THAI ELITE — flagship */}
+      {(cat === "Все" || cat === "Thai Elite") && (
+        <section className="section" id="elite" style={{ background: "var(--ink)", color: "var(--cream)" }} data-screen-label="Visas / Thai Elite">
+          <div className="container">
+            <div className="section-head">
+              <div className="left">
+                <div className="eyebrow pink" style={{ background: accent }}>★ flagship · Thai Elite Visa</div>
+                <h2 style={{ color: "var(--cream)", marginTop: 12 }}>Долгосрочная виза<br/>в Таиланд на <span className="hl" style={{ background: accent }}>5, 10 или 15 лет</span>.</h2>
+                <p className="lead" style={{ color: "rgba(255,251,247,0.75)", marginTop: 18 }}>
+                  Привилегированная виза для тех, кто хочет долго жить или часто
+                  приезжать в Таиланд. VIP-встреча в аэропорту, Premium Lane,
+                  помощь с банком, правами, 90-day report и скидки у партнёров.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-4">
+              {eliteTiers.map(t => (
+                <div
+                  key={t.name}
+                  className={"elite-tier " + (t.featured ? "elite-featured" : "")}
+                  style={t.featured ? { background: accent } : null}
+                >
+                  {t.featured && <div className="elite-badge">{t.tag}</div>}
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.7 }}>
+                    Elite {t.name}
+                  </div>
+                  <h3 style={{ fontSize: 36, color: t.featured ? "white" : "var(--cream)", marginTop: 4 }}>{t.name}</h3>
+                  <div style={{ display: "flex", gap: 14, alignItems: "baseline", marginTop: 6 }}>
+                    <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 22, color: t.featured ? "white" : accent }}>{t.yrs}</div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, opacity: 0.7 }}>{t.points}</div>
+                  </div>
+                  <ul className="checks elite-checks">
+                    {t.highlights.map((h, i) => <li key={i} style={{ color: t.featured ? "white" : "rgba(255,251,247,0.9)" }}>{h}</li>)}
+                  </ul>
+                  <div className="elite-price">
+                    <div className="price" style={{ fontSize: 28, color: t.featured ? "white" : "var(--cream)" }}>{t.price}</div>
+                    <button
+                      className={"btn " + (t.featured ? "btn-ink" : "btn-primary") + " btn-sm"}
+                      style={t.featured ? null : { background: accent }}
+                      onClick={openChat}
+                    >
+                      Оформить <Icon.Arrow s={14}/>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: 28, padding: 18, background: "rgba(255,251,247,0.04)", border: "1px solid rgba(255,251,247,0.08)", borderRadius: "var(--r-md)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, fontSize: 14 }}>
+              <span style={{ opacity: 0.75 }}>★ Также есть архивный пакет <b style={{ color: "var(--cream)" }}>Elite Ultimate Privilege</b> на 20 лет — сейчас не в продаже.</span>
+              <span style={{ opacity: 0.6, fontFamily: "var(--font-mono)", fontSize: 12 }}>цены актуальны на 2026</span>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* THAILAND VISAS — other types */}
+      {(cat === "Все" || ["Туризм", "Пенсионная", "Рабочая", "DTV"].includes(cat)) && (
+        <section className="section" data-screen-label="Visas / Thailand types">
+          <div className="container">
+            <div className="section-head">
+              <div className="left">
+                <div className="eyebrow">★ другие визы Таиланда</div>
+                <h2>Туризм. Пенсия.<br/>Работа. <span className="hl" style={{ background: accent }}>Удалёнка.</span></h2>
+              </div>
+            </div>
+            <div className="grid grid-2">
+              {(filtered && filtered !== "elite" && filtered !== "other" ? filtered : thaiVisas).map((v, i) => (
+                <div key={v.name} className="visa-card" style={{ padding: 28 }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+                    <div className="visa-flag" style={{ fontSize: 28, background: accent + "22" }}>{v.icon}</div>
+                    <div style={{ flex: 1 }}>
+                      <div className="card-tag" style={{ background: accent + "22", color: accent }}>{v.c}</div>
+                      <h3 style={{ marginTop: 6, fontSize: 28 }}>{v.name}</h3>
+                      <p style={{ color: "var(--muted)", fontSize: 14, margin: "4px 0 0" }}>{v.sub}</p>
+                    </div>
+                  </div>
+                  <p style={{ color: "var(--muted)", margin: 0, fontSize: 15 }}>{v.what}</p>
+                  <ul className="checks">
+                    {v.types.map((t, j) => <li key={j}>{t}</li>)}
+                  </ul>
+                  <div className="visa-meta-row" style={{ marginTop: 4 }}>
+                    <div><b>{v.time}</b> · оформление</div>
+                    <div><b>{v.stay}</b> · пребывание</div>
+                  </div>
+                  <div className="card-row">
+                    <div className="price" style={{ color: accent, fontSize: 26 }}>{v.price}</div>
+                    <button className="btn btn-ink btn-sm" onClick={openChat}>Оформить <Icon.Arrow s={14}/></button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* EXTRAS */}
+      <section className="section section-sm" data-screen-label="Visas / Extras">
+        <div className="container">
+          <div className="section-head">
+            <div className="left">
+              <div className="eyebrow">★ дополнительные услуги</div>
+              <h2>Не только виза.<br/>Закроем всё <span className="hl" style={{ background: accent }}>сопровождение</span>.</h2>
+            </div>
+          </div>
+          <div className="grid grid-4">
+            {extras.map(e => (
+              <div key={e} className="card" style={{ padding: 20 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 12, background: accent + "22", color: accent, display: "grid", placeItems: "center", fontWeight: 800 }}>✦</div>
+                <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, letterSpacing: "-0.01em" }}>{e}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PROCESS */}
+      <section className="section" data-screen-label="Visas / Process">
+        <div className="container">
+          <div className="section-head">
+            <div className="left">
+              <div className="eyebrow pink" style={{ background: accent }}>★ как мы работаем</div>
+              <h2>4 шага.<br/>До <span className="hl" style={{ background: accent }}>штампа</span>.</h2>
+            </div>
+          </div>
+          <div className="steps">
+            <div className="step"><div className="step-num" style={{ color: accent }}>01</div><h4>Заявка</h4><p>Чат, Telegram или WhatsApp — узнаём цель и страну.</p></div>
+            <div className="step"><div className="step-num" style={{ color: accent }}>02</div><h4>Подбор</h4><p>Тип визы, стоимость, сроки — фиксируем в договоре.</p></div>
+            <div className="step"><div className="step-num" style={{ color: accent }}>03</div><h4>Документы</h4><p>Собираем, переводим, проверяем дважды. Подаём.</p></div>
+            <div className="step"><div className="step-num" style={{ color: accent }}>04</div><h4>Штамп</h4><p>Ведём до результата. Помогаем с сопровождением после.</p></div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="section" data-screen-label="Visas / FAQ">
+        <div className="container">
+          <div className="section-head">
+            <div className="left">
+              <div className="eyebrow">★ FAQ</div>
+              <h2>Спрашивают чаще всего.</h2>
+            </div>
+            <button className="btn btn-primary" style={{ background: accent }} onClick={openChat}>Задать свой вопрос <Icon.Chat/></button>
+          </div>
+          <div style={{ maxWidth: 880 }}>
+            {faq.map((f, i) => (
+              <div key={i} className={"faq-item " + (open === i ? "open" : "")} onClick={() => setOpen(open === i ? -1 : i)}>
+                <div className="faq-q">
+                  <span>{f.q}</span>
+                  <span className="ico"><Icon.Plus/></span>
+                </div>
+                <div className="faq-a">{f.a}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CtaBanner
+        title="Подберём визу под вас — без воды и без присутствия."
+        sub="Напишите цель, сроки и бюджет — через 5 минут пришлём план и стоимость. Оплата в ₽, ฿ или USDT."
+        accent={accent}
+        openChat={openChat}
+      />
+    </main>
+  );
+}
+
+window.PageVisas = PageVisas;

@@ -1,0 +1,185 @@
+/* global React, Icon, CtaBanner */
+const { useState: useStateReviews } = React;
+
+function PageReviews({ setPage, accent, openChat }) {
+  const [filter, setFilter] = useStateReviews("Все");
+
+  const filters = ["Все", "Визы", "Юр услуги", "Обмен валют"];
+
+  const reviews = [
+    {
+      cat: "Визы", name: "Карина М.", tag: "Турция · туристическая", v: "pink",
+      text: "Оформили мне визу в Турцию за неделю. Я даже не успела понервничать. Не знаю, что они делают, но это работает.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Визы", name: "Артём К.", tag: "Шенген · Италия", v: "",
+      text: "Подавали на Шенген второй раз — первый раз сами, отказ. Тут всё прошло гладко, менеджер вёл за руку, отвечал в выходные. Уже планируем второй пакет на родителей.",
+      stars: 5, len: "lg"
+    },
+    {
+      cat: "Обмен валют", name: "Дима О.", tag: "ОАЭ · обмен валют", v: "ink",
+      text: "Был в Дубае, нужно было срочно обменять кеш. Курьер приехал через 40 минут, курс честный. В следующий раз тоже к ним.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Визы", name: "Наташа В.", tag: "Корея · D-2 студенческая", v: "",
+      text: "Я в шоке. Сама бы не справилась. Куча документов, переводы, апостили — всё под контролем. Девочки в чате — золото.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Юр услуги", name: "Михаил П.", tag: "Сербия · DOO", v: "lemon",
+      text: "Открыли мне компанию в Сербии за три недели. Без меня, по доверенности. Я просто закидывал документы и спал спокойно.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Визы", name: "Алина С.", tag: "Япония · туризм", v: "",
+      text: "Очень понравилось, что не пытаются продать «полный пакет за миллион». Сразу сказали, какие услуги нужны, какие нет. И цена не выросла за процесс — как договорились, так и заплатила.",
+      stars: 5, len: "lg"
+    },
+    {
+      cat: "Юр услуги", name: "Сергей Л.", tag: "ВНЖ · ОАЭ", v: "",
+      text: "ВНЖ в ОАЭ. Прошло без сюрпризов. Сопровождение нормальное, без впаривания «премиум-консультаций».",
+      stars: 5, len: "sm"
+    },
+    {
+      cat: "Визы", name: "Юлия Б.", tag: "Шенген · Греция", v: "pink",
+      text: "Спасибо за то, что объяснили человеческим языком, что нужно. До этого читала форумы — голова взорвалась. Здесь — 20 минут чата и всё понятно.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Обмен валют", name: "Игорь Д.", tag: "Москва · 50K USD", v: "",
+      text: "Меняли крупную сумму. Договор, банковская комната, проверка детектором — всё как у взрослых. Не пожалел, что не понёс в подворотню к серым кассам.",
+      stars: 5, len: "lg"
+    },
+    {
+      cat: "Визы", name: "Лена и Никита", tag: "США · B1/B2", v: "",
+      text: "Прошли собеседование на американскую визу с первого раза. Готовили нас как к Олимпиаде. Каждый ответ отрепетирован. Виза в кармане.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Юр услуги", name: "Анна Р.", tag: "Апостили · диплом", v: "",
+      text: "Апостиль и нотариальный перевод диплома за 4 дня. Сама бегала бы месяц.",
+      stars: 5, len: "sm"
+    },
+    {
+      cat: "Визы", name: "Олег М.", tag: "Германия · студенческая", v: "ink",
+      text: "Сложный кейс — два высших, перерыв в 6 лет, finance proof не до конца понятный. Разрулили, помогли с Sperrkonto, прошёл собеседование в посольстве. Сейчас пишу из Берлина 💗",
+      stars: 5, len: "lg"
+    },
+    {
+      cat: "Обмен валют", name: "Дарья К.", tag: "USDT → EUR", v: "",
+      text: "Меняла USDT на евро наличкой. Сделка через 30 минут, всё чисто, договор. Буду пользоваться.",
+      stars: 5, len: "sm"
+    },
+    {
+      cat: "Визы", name: "Тимур Б.", tag: "Таиланд · Edu Visa", v: "pink",
+      text: "Помогли с Edu Visa в Таиланд. До этого пробовали через школу — затянули на 2 месяца. С thai bear — 12 дней. Я просто хочу спокойно жить и сёрфить.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Юр услуги", name: "Елена и Олег", tag: "Покупка недвижимости · Турция", v: "",
+      text: "Покупали квартиру в Алании. Проверка ТАПУ, переводчик, нотариус, договор — всё через юристов thai bear. Чувствовали себя защищёнными.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Визы", name: "Ксения А.", tag: "Цифровой кочевник · Испания", v: "",
+      text: "Подавала на Digital Nomad в Испанию. Документы, переводы, доказательства дохода — всё помогли собрать и оформить. Сижу в Валенсии и пью кофе.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Обмен валют", name: "Павел Н.", tag: "Стамбул · TRY", v: "lemon",
+      text: "В Стамбуле меняли доллары на лиры. По нашему курсу, без сюрпризов, в кафе на Каракёе. Бар, кофе, ещё и историю мне рассказали про местные кафе. Топ.",
+      stars: 5, len: "md"
+    },
+    {
+      cat: "Визы", name: "Маша и Петя", tag: "Шенген · 4 пакета", v: "",
+      text: "Делали Шенгены на всю семью — 4 пакета сразу. Сделали со скидкой и за раз. Всё четко.",
+      stars: 5, len: "sm"
+    },
+  ];
+
+  const filtered = filter === "Все" ? reviews : reviews.filter(r => r.cat === filter);
+
+  return (
+    <main data-screen-label="Reviews">
+      <section className="page-hero" style={{ background: "var(--pink-wash)" }} data-screen-label="Reviews / Hero">
+        <div className="container">
+          <div className="crumb">Главная <span className="sep">/</span> Отзывы</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 32, alignItems: "center" }}>
+            <div>
+              <div className="eyebrow pink" style={{ background: accent, marginBottom: 18 }}>★ 4.98 средняя оценка</div>
+              <h1 style={{ fontSize: "clamp(48px, 7vw, 110px)" }}>
+                1 200+ отзывов.<br/>
+                Без фотошопа<br/>
+                и <span className="hl" style={{ background: accent }}>проплаченных</span>.
+              </h1>
+              <p className="lead" style={{ marginTop: 22 }}>
+                Реальные истории клиентов — короткие, длинные, эмоциональные, спокойные.
+                Так, как пишут живые люди. Без отретушированных «всё-было-отлично».
+              </p>
+              <div className="hero-cta-row">
+                <button className="btn btn-primary btn-lg" style={{ background: accent }} onClick={openChat}>
+                  Оставить отзыв <Icon.Arrow/>
+                </button>
+                <button className="btn btn-ghost btn-lg" onClick={() => setPage("visas")}>Перейти к визам</button>
+              </div>
+
+              <div style={{ display: "flex", gap: 24, marginTop: 36, flexWrap: "wrap" }}>
+                <div><div className="card-num" style={{ color: accent }}>4.98</div><div style={{ color: "var(--muted)", fontSize: 13 }}>средняя оценка</div></div>
+                <div><div className="card-num" style={{ color: accent }}>1.2k</div><div style={{ color: "var(--muted)", fontSize: 13 }}>отзывов</div></div>
+                <div><div className="card-num" style={{ color: accent }}>97%</div><div style={{ color: "var(--muted)", fontSize: 13 }}>рекомендуют</div></div>
+              </div>
+            </div>
+            <div style={{ position: "relative" }}>
+              <div className="slot-wrap pink-22" style={{ maxWidth: 460, aspectRatio: "1/1", borderRadius: "var(--r-lg)" }}>
+                <div className="slot-label">медведь · happy reviews</div>
+                <image-slot id="reviews-hero-bear" placeholder="перетащите арт" shape="rounded" radius="22"></image-slot>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" data-screen-label="Reviews / Feed">
+        <div className="container">
+          <div className="pill-row" style={{ marginBottom: 32 }}>
+            {filters.map(f => (
+              <button
+                key={f}
+                className={"pill " + (filter === f ? "active" : "")}
+                onClick={() => setFilter(f)}
+                style={filter === f ? { background: accent, borderColor: accent, color: "white" } : null}
+              >{f}</button>
+            ))}
+          </div>
+
+          <div className="masonry">
+            {filtered.map((r, i) => (
+              <div key={i} className={"review-card " + (r.v ? "var-" + r.v : "")} style={r.v === "pink" ? { background: accent } : null}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div className="review-stars">{"★".repeat(r.stars)}</div>
+                  <div className="review-tag">{r.cat}</div>
+                </div>
+                <div className={"review-text " + (r.len === "lg" ? "lg" : "")}>{r.text}</div>
+                <div className="review-author">
+                  <div className="review-avatar">{r.name[0]}</div>
+                  <div><b>{r.name}</b><br/><span style={{ opacity: 0.75, fontSize: 13 }}>{r.tag}</span></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CtaBanner
+        title="Будете нашим следующим отзывом?"
+        sub="Напишите в чат — мы возьмём ваш кейс и через какое-то время вы тоже окажетесь здесь. Возможно, тоже на розовой плашке."
+        accent={accent}
+        openChat={openChat}
+      />
+    </main>
+  );
+}
+
+window.PageReviews = PageReviews;
